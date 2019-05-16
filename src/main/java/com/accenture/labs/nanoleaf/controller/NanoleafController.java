@@ -5,8 +5,10 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.accenture.labs.nanoleaf.dto.EventDto;
 import com.accenture.labs.nanoleaf.dto.RGBDto;
 import com.accenture.labs.nanoleaf.service.NanoleafService;
 
@@ -134,5 +136,15 @@ public class NanoleafController {
 	@PostMapping("/audio")
 	public void audio() {
 		service.getAudio();
+	}
+	
+	@PostMapping("initGame")
+	public void initGame() {
+		service.initGame();
+	}
+	
+	@PostMapping("addEvent")
+	public void addEvent(@RequestBody EventDto event) {
+		service.addEvent(event);
 	}
 }

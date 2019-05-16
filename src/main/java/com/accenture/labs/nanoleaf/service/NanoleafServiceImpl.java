@@ -21,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.accenture.labs.nanoleaf.dto.BooleanValueDto;
 import com.accenture.labs.nanoleaf.dto.EffectDto;
+import com.accenture.labs.nanoleaf.dto.EventDto;
 import com.accenture.labs.nanoleaf.dto.LayoutDto;
 import com.accenture.labs.nanoleaf.dto.PositionDataDto;
 import com.accenture.labs.nanoleaf.dto.RGBDto;
@@ -28,6 +29,7 @@ import com.accenture.labs.nanoleaf.dto.RhythmModeDto;
 import com.accenture.labs.nanoleaf.dto.StateDto;
 import com.accenture.labs.nanoleaf.dto.WriteDto;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 public class NanoleafServiceImpl implements NanoleafService {
 
 	Map<Integer, RGBDto> currentStatus = new HashMap<>();
+	int gameStep;
 	
 	@Value("${authToken}")
 	String authToken;
@@ -271,8 +274,11 @@ public class NanoleafServiceImpl implements NanoleafService {
 		}
 	}
 	
-	private List<Integer> panels = Arrays.asList(25, 211, 103, 9, 164, 49, 183, 63, 248, 206, 86);
+	private List<Integer> panels = Arrays.asList(211, 103, 9, 164, 49, 183, 63, 248, 206, 86, 25, 129, 117, 55, 47);
 	private int indice = 0;
+	private List<RGBDto> colors = Arrays.asList(RGBDto.builder().red(24).green(52).blue(15).build(),
+			RGBDto.builder().red(48).green(104).blue(30).build(), RGBDto.builder().red(72).green(156).blue(45).build(),
+			ACC_TECH);
 	
 	private int lastPanel() {
 		if (indice > 0)
@@ -285,5 +291,20 @@ public class NanoleafServiceImpl implements NanoleafService {
 		else return panels.get(indice);
 	}
 	
+	public void initGame() {
+		gameStep = 0;
+		stopCurrentEffect(Boolean.TRUE);
+	}
+	
+	public void addEvent(EventDto event) {
+		// 3, 2, 0, 1S
+		
+		drawAllPanels(colors.get(event.getButtonId()));
+		
+	}
 
+	public void drawAllPanels(RGBDto color) {
+		panels.forEach(p -> setAnimdata(color, p, COMMAND_DISPLAY, TYPE_STATIC, Boolean.FALSE));
+	}
+	
 }

@@ -3,6 +3,7 @@ package com.accenture.labs.nanoleaf.service;
 import java.util.Arrays;
 import java.util.List;
 
+import com.accenture.labs.nanoleaf.dto.EventDto;
 import com.accenture.labs.nanoleaf.dto.LayoutDto;
 import com.accenture.labs.nanoleaf.dto.RGBDto;
 
@@ -31,4 +32,8 @@ public interface NanoleafService {
 	public void setRhythmModeInternal();
 	public void blink();
 	public void getAudio();
+	
+	public void initGame();
+	public void addEvent(EventDto event);
+	
 }
